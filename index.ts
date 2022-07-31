@@ -1,26 +1,21 @@
 import express, { Express, Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
-import { swaggerOptions } from './src/docs';
-
 
 import db from './src/config/database.config'; 
-import userRoutes from "./src/users/UserController";
+import userRoutes from "./src/users/userController";
+import { swaggerOptions } from './src/docs';
 
 dotenv.config();
-
-const app: Express = express();
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions));
-
-
-
-const port = process.env.PORT;
 
 const dbAuthenticate = async () => {
   try {
     await db.authenticate();
     console.log('Connection has been established successfully.');
+    //create Tables
+    await db.sync();
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
@@ -28,7 +23,17 @@ const dbAuthenticate = async () => {
 
 dbAuthenticate();
 
-app.use('/user', userRoutes);
+const app: Express = express();
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions));
+
+app.use(bodyParser.json({limit: "30mb"}));
+app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
+app.use(cors());
+
+const port = process.env.PORT;
+
+app.use('/users', userRoutes);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${port}`);

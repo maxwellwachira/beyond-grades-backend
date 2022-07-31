@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json';
+import { swaggerOptions } from './src/docs';
 
 
 import db from './src/config/database.config'; 
@@ -11,8 +11,8 @@ dotenv.config();
 
 const app: Express = express();
 
-app.use('/api-docs', swaggerUi.serve);
-app.get('/api-docs', swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions));
+
 
 
 const port = process.env.PORT;

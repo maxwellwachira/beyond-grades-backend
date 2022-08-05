@@ -5,7 +5,16 @@ export const getUser = {
         operationId: "getUser", // unique operation id.
         summary: "Get one user",
         parameters: [
-
+          // expected parameters
+          {
+            name: "id", // name of param
+            in: "path", // location of param
+            schema: {
+              $ref: "#/components/schemas/id", // id model
+            },
+            required: true, // mandatory
+            description: "Get user using userId", // param desc
+          },
         ], // expected params.
         // expected responses
         responses: {

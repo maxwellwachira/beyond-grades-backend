@@ -5,15 +5,13 @@ import { getUsers } from "./getUsers";
 import { updateUser } from "./updateUser";
 
 export const userPaths = {
-    paths: {
-        '/users': {
-            ...getUsers,
-            ...createUser
-        },
-        '/users/{id}': {
-            ...getUser,
-            ...updateUser,
-            ...deleteUser
-        }
+    '/users': {
+        ...getUsers,
+        ...createUser
+    },
+    '/users/{id}': {
+        ...getUser,
+        ...updateUser,
+        ...deleteUser
     }
 }

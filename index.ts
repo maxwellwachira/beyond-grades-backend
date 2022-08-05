@@ -5,8 +5,13 @@ import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 
 import db from './src/config/database.config'; 
-import userRoutes from "./src/users/userController";
 import { swaggerOptions } from './src/docs';
+
+import authRoutes from './src/authentication/emailauth/authController';
+import userRoutes from "./src/users/userController";
+import googleAuthRoutes from './src/authentication/googleauth/googleauthController';
+import twitterAuthRoutes from './src/authentication/twitterauth/twitterauthController';
+
 
 dotenv.config();
 
@@ -33,6 +38,9 @@ app.use(cors());
 
 const port = process.env.PORT;
 
+app.use('/auth', authRoutes);
+app.use('/googleauth', googleAuthRoutes);
+app.use('/twitterauth', twitterAuthRoutes);
 app.use('/users', userRoutes);
 
 app.listen(port, () => {

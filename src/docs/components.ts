@@ -59,6 +59,22 @@ export const components = {
             },
           },
 
+          //UserInput Model
+          UserLogin: {
+            type: "object", 
+            properties: {
+                email: {
+                    type: "string",
+                    example: "johndoe@mail.com"
+                },
+                password: {
+                    type: "string",
+                    format: "password",
+                    example: "strongpassword"
+                }
+            },
+          },
+
           // error model
           GeneralError: {
             type: "object",

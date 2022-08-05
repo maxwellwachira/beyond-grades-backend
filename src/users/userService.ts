@@ -10,10 +10,10 @@ export const createUser = async (req: Request, res: Response) => {
 
     try {
         const record = await UserModel.create({...req.body, role, active, disabled});
-        return res.json({record, message: "User created successfully"});
+        return res.status(201).json({record, message: "User created successfully"});
 
     } catch (error) {
-        return res.json({message: "failed to create", status: 500, route: '/users'});
+        return res.status(500).json({ message: "Something went wrong"});
     }
     
 }
@@ -22,16 +22,16 @@ export const getUsers = async (req: Request, res: Response) => {
     const limit  = req.query?.limit as number | undefined;
     const offset  = req.query?.offset as number | undefined;
     try {
-        const users = await UserModel.findAll({
+        const users = await UserModel.findAndCountAll({
             where:{
                 disabled: false
             },
             limit,
             offset
         });
-        return res.json(users);
+        return res.status(200).json(users);
     } catch (error) {
-        return res.json({message: "failed to fetch users", status: 500, route: '/users'});
+        return res.status(500).json({ message: "Something went wrong"});
     }
 }
 
@@ -40,11 +40,11 @@ export const getUser =  async (req: Request, res: Response) => {
     try {
         const user = await UserModel.findOne({where: {id}});
         if(!user){
-            return res.json({message: `user with id = ${id} does not exists`});
+            return res.status(404).json({message: `user with id = ${id} does not exists`});
         }
         return res.json(user);
     } catch (error) {
-        return res.json({message: "failed to fetch user", status: 500, route: '/users/:id'});
+        return res.status(500).json({ message: "Something went wrong"});
     }
 }
 
@@ -54,13 +54,13 @@ export const updateUser = async (req: Request, res: Response) => {
     try {
         const user = await UserModel.findOne({where: { id }});
         if(!user){
-            return res.json({message: `user with id = ${id} does not exists`});
+            return res.status(404).json({message: `user with id = ${id} does not exists`});
         }
 
         //const updatedUser = await UserModel.update({});
         
     } catch (error) {
-        return res.json({message: "failed to update user", status: 500, route: '/users/:id'});
+        return res.status(500).json({ message: "Something went wrong"});
     }
 }
 
@@ -77,6 +77,6 @@ export const deleteUser =  async (req: Request, res: Response) => {
         return res.json({record: deletedUser});
         
     } catch (error) {
-        return res.json({message: "failed to update user", status: 500, route: '/users/:id'});
+        return res.status(500).json({ message: "Something went wrong"});
     }
 }
